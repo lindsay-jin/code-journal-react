@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { type Entry } from '../lib/data';
 import { FaPencil } from 'react-icons/fa6';
 
@@ -16,7 +17,9 @@ export function EntryCard({ entry }: EntryCardProps) {
             <p>{entry.title}</p>
           </div>
           <div>
+            <Link to={`/edit/${entry.entryId}`}>
             <FaPencil />
+            </Link>
           </div>
         </div>
         <div className="">

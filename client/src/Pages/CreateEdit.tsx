@@ -1,6 +1,6 @@
 import { FormEvent, useState } from 'react';
-import { addEntry, updateEntry, type UnsavedEntry } from '../lib/data';
-import { useNavigate } from 'react-router-dom';
+import { addEntry, updateEntry, type UnsavedEntry, readEntry } from '../lib/data';
+import { useNavigate, useParams } from 'react-router-dom';
 
 type CreateEditProps = {
   isEditing: boolean;
@@ -12,6 +12,9 @@ export function CreateEdit({ isEditing }: CreateEditProps) {
   const [textInput, setTextInput] = useState('');
 
   const navigate = useNavigate();
+  const {entryId} = useParams();
+
+  const editedEntry = entryId? readEntry(+entryId) : undefined;
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -20,13 +23,15 @@ export function CreateEdit({ isEditing }: CreateEditProps) {
       photoUrl: urlInput,
       notes: textInput,
     };
-    if (isEditing) {
-      updateEntry(object);
+    if (editedEntry) {
+      updateEntry(editedEntry);
     } else {
       addEntry(object);
     }
     navigate('/');
   }
+
+
 
   return (
     <div className="container" data-view="entry-form">

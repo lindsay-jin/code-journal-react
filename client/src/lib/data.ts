@@ -37,6 +37,10 @@ export function readEntries(): Entry[] {
   return readData().entries;
 }
 
+export function readEntry(entryId: number): Entry | undefined {
+  return readData().entries.find((entry)=>entry.entryId=== entryId);
+}
+
 export function addEntry(entry: UnsavedEntry): Entry {
   const data = readData();
   const newEntry = {
