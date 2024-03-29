@@ -6,12 +6,19 @@ import { CreateEdit } from './Pages/CreateEdit';
 import './css/styles.css';
 import './css/layout.css';
 import './css/reset.css';
+import { readEntries } from './lib/data';
+import { useEffect } from 'react';
+
 
 function App() {
+  useEffect(()=>{
+    const arr = readEntries();
+  })
+
   return (
     <Routes>
       <Route path="/" element={<Header />}>
-        <Route index element={<View />} />
+        <Route index element={<View entries={()=>readEntries()}/>} />
         <Route path="create-edit" element={<CreateEdit />} />
       </Route>
     </Routes>
