@@ -22,8 +22,6 @@ export function View() {
     );
   }
 
-  console.log(readEntries());
-
   return (
     <div className="container" data-view="entries">
       <div className="row">

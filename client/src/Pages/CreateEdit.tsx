@@ -1,5 +1,12 @@
-import { FormEvent, useState } from 'react';
-import { addEntry, updateEntry, type UnsavedEntry, readEntry } from '../lib/data';
+import { FormEvent, useEffect, useState } from 'react';
+import {
+  addEntry,
+  updateEntry,
+  type UnsavedEntry,
+  readEntry,
+  Entry,
+  removeEntry,
+} from '../lib/data';
 import { useNavigate, useParams } from 'react-router-dom';
 
 type CreateEditProps = {
@@ -12,26 +19,44 @@ export function CreateEdit({ isEditing }: CreateEditProps) {
   const [textInput, setTextInput] = useState('');
 
   const navigate = useNavigate();
-  const {entryId} = useParams();
+  const { entryId } = useParams();
 
-  const editedEntry = entryId? readEntry(+entryId) : undefined;
+  const editedEntry = entryId ? readEntry(+entryId) : undefined;
+
+  useEffect(() => {
+    if (editedEntry) {
+      setTitleInput(editedEntry.title);
+      setUrlInput(editedEntry.photoUrl);
+      setTextInput(editedEntry.notes);
+    }
+  }, []);
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const object: UnsavedEntry = {
-      title: titleInput,
-      photoUrl: urlInput,
-      notes: textInput,
-    };
+
     if (editedEntry) {
-      updateEntry(editedEntry);
+      const submitObj: Entry = {
+        title: titleInput,
+        photoUrl: urlInput,
+        notes: textInput,
+        entryId: editedEntry.entryId,
+      };
+      updateEntry(submitObj);
     } else {
-      addEntry(object);
+      const submitObj: UnsavedEntry = {
+        title: titleInput,
+        photoUrl: urlInput,
+        notes: textInput,
+      };
+      addEntry(submitObj);
     }
     navigate('/');
   }
 
-
+  function handleDelete() {
+    removeEntry(+entryId!);
+    navigate('/');
+  }
 
   return (
     <div className="container" data-view="entry-form">
@@ -98,7 +123,8 @@ export function CreateEdit({ isEditing }: CreateEditProps) {
             <button
               className={`${isEditing ? '' : 'invisible '}delete-entry-button`}
               type="button"
-              id="deleteEntry">
+              id="deleteEntry"
+              onClick={handleDelete}>
               Delete Entry
             </button>
             <button
