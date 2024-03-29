@@ -1,12 +1,27 @@
 import { Link } from 'react-router-dom';
 import { EntryCard } from '../Components/EntryCard.tsx';
-import { type Entry } from '../lib/data.ts';
+import { readEntries, type Entry } from '../lib/data.ts';
+import { useCallback, useEffect, useState } from 'react';
 
-type Props = {
-  entries: Entry[];
-};
+export function View() {
+  const [itemArr, setItemArr] = useState<Entry[]>();
 
-export function View({ entries }: Props) {
+  const getArray = useCallback(() => {
+    return readEntries();
+  }, []);
+
+  useEffect(() => {
+    setItemArr(getArray);
+  }, [getArray]);
+
+  if (!itemArr) {
+    return (
+      <div>
+        <p>Error!</p>
+      </div>
+    );
+  }
+
   return (
     <div className="container" data-view="entries">
       <div className="row">
@@ -24,7 +39,7 @@ export function View({ entries }: Props) {
       <div className="row">
         <div className="column-full">
           <ul className="entry-ul" id="entryUl">
-            {entries.map((entry) => (
+            {itemArr.map((entry) => (
               <EntryCard key={entry.entryId} entry={entry} />
             ))}
           </ul>

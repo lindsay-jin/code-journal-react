@@ -1,4 +1,22 @@
+import { FormEvent, useState } from 'react';
+import { addEntry, type UnsavedEntry } from '../lib/data';
+import { Link } from 'react-router-dom';
+
 export function CreateEdit() {
+  const [titleInput, setTitleInput] = useState('');
+  const [urlInput, setUrlInput] = useState('');
+  const [textInput, setTextInput] = useState('');
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const object: UnsavedEntry = {
+      title: titleInput,
+      photoUrl: urlInput,
+      notes: textInput,
+    };
+    addEntry(object);
+  }
+
   return (
     <div className="container" data-view="entry-form">
       <div className="row">
@@ -6,14 +24,14 @@ export function CreateEdit() {
           <h1 id="formH1">New Entry</h1>
         </div>
       </div>
-      <form id="entryForm">
+      <form onSubmit={handleSubmit} id="entryForm">
         <div className="row margin-bottom-1">
           <div className="column-half">
             <img
               className="input-b-radius form-image"
               id="formImage"
-              src="images/placeholder-image-square.jpg"
-              alt="image of entry image"
+              src={urlInput}
+              alt={titleInput}
             />
           </div>
           <div className="column-half">
@@ -21,6 +39,8 @@ export function CreateEdit() {
               Title
             </label>
             <input
+              onChange={(e) => setTitleInput(e.target.value)}
+              value={titleInput}
               required
               className="input-b-color text-padding input-b-radius purple-outline input-height margin-bottom-2 d-block width-100"
               type="text"
@@ -31,6 +51,8 @@ export function CreateEdit() {
               Photo URL
             </label>
             <input
+              onChange={(e) => setUrlInput(e.target.value)}
+              value={urlInput}
               required
               className="input-b-color text-padding input-b-radius purple-outline input-height margin-bottom-2 d-block width-100"
               type="text"
@@ -45,6 +67,8 @@ export function CreateEdit() {
               Notes
             </label>
             <textarea
+              onChange={(e) => setTextInput(e.target.value)}
+              value={textInput}
               required
               className="input-b-color text-padding input-b-radius purple-outline d-block width-100"
               name="formNotes"
@@ -61,9 +85,13 @@ export function CreateEdit() {
               id="deleteEntry">
               Delete Entry
             </button>
-            <button className="input-b-radius text-padding purple-background white-text">
-              SAVE
-            </button>
+            <Link to="/">
+              <button
+                type="submit"
+                className="input-b-radius text-padding purple-background white-text">
+                SAVE
+              </button>
+            </Link>
           </div>
         </div>
       </form>
