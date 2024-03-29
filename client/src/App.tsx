@@ -12,7 +12,8 @@ function App() {
     <Routes>
       <Route path="/" element={<Header />}>
         <Route index element={<View />} />
-        <Route path="create-edit" element={<CreateEdit />} />
+        <Route path="create" element={<CreateEdit isEditing={false} />} />
+        <Route path="edit/:entryId" element={<CreateEdit isEditing={true} />} />
       </Route>
     </Routes>
   );

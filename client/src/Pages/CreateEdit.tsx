@@ -1,11 +1,17 @@
 import { FormEvent, useState } from 'react';
-import { addEntry, type UnsavedEntry } from '../lib/data';
-import { Link } from 'react-router-dom';
+import { addEntry, updateEntry, type UnsavedEntry } from '../lib/data';
+import { useNavigate } from 'react-router-dom';
 
-export function CreateEdit() {
+type CreateEditProps = {
+  isEditing: boolean;
+};
+
+export function CreateEdit({ isEditing }: CreateEditProps) {
   const [titleInput, setTitleInput] = useState('');
   const [urlInput, setUrlInput] = useState('');
   const [textInput, setTextInput] = useState('');
+
+  const navigate = useNavigate();
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -14,14 +20,19 @@ export function CreateEdit() {
       photoUrl: urlInput,
       notes: textInput,
     };
-    addEntry(object);
+    if (isEditing) {
+      updateEntry(object);
+    } else {
+      addEntry(object);
+    }
+    navigate('/');
   }
 
   return (
     <div className="container" data-view="entry-form">
       <div className="row">
         <div className="column-full d-flex justify-between">
-          <h1 id="formH1">New Entry</h1>
+          <h1 id="formH1">{isEditing ? 'Edit Entry' : 'New Entry'}</h1>
         </div>
       </div>
       <form onSubmit={handleSubmit} id="entryForm">
@@ -80,18 +91,16 @@ export function CreateEdit() {
         <div className="row">
           <div className="column-full d-flex justify-between">
             <button
-              className="invisible delete-entry-button"
+              className={`${isEditing ? '' : 'invisible '}delete-entry-button`}
               type="button"
               id="deleteEntry">
               Delete Entry
             </button>
-            <Link to="/">
-              <button
-                type="submit"
-                className="input-b-radius text-padding purple-background white-text">
-                SAVE
-              </button>
-            </Link>
+            <button
+              type="submit"
+              className="input-b-radius text-padding purple-background white-text">
+              SAVE
+            </button>
           </div>
         </div>
       </form>

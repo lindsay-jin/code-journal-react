@@ -22,13 +22,15 @@ export function View() {
     );
   }
 
+  console.log(readEntries());
+
   return (
     <div className="container" data-view="entries">
       <div className="row">
         <div className="column-full d-flex justify-between align-center">
           <h1>Entries</h1>
           <h3>
-            <Link to="/create-edit">
+            <Link to="/create">
               <p id="formLink" className="white-text form-link">
                 NEW
               </p>

@@ -7,15 +7,19 @@ type EntryCardProps = {
 export function EntryCard({ entry }: EntryCardProps) {
   return (
     <li className="d-flex">
-      <div>
-        <img src={entry.photoUrl} alt={entry.title} />
+      <div className="column-half">
+        <img className="form-image" src={entry.photoUrl} alt={entry.title} />
       </div>
-      <div>
-        <div>
-          <p>{entry.title}</p>
-          <FaPencil />
+      <div className="column-half">
+        <div className="d-flex justify-between">
+          <div>
+            <p>{entry.title}</p>
+          </div>
+          <div>
+            <FaPencil />
+          </div>
         </div>
-        <div>
+        <div className="">
           <p>{entry.notes}</p>
         </div>
       </div>
